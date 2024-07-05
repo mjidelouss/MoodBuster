@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 
 interface Genre {
   id: number;
@@ -32,20 +33,44 @@ interface GenreSelectorProps {
 
 function GenreSelector({ onGenreSelect }: GenreSelectorProps) {
   return (
-    <div className="mb-6">
-      <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-3">Select a genre:</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+    <motion.div 
+      className="mb-6"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-3 font-audiowide">Select a genre:</h2>
+      <motion.div 
+        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2"
+        variants={{
+          hidden: { opacity: 0 },
+          show: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.1
+            }
+          }
+        }}
+        initial="hidden"
+        animate="show"
+      >
         {genres.map(genre => (
-          <button
+          <motion.button
             key={genre.id}
             onClick={() => onGenreSelect(genre)}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors dark:bg-blue-700 dark:hover:bg-blue-800 text-sm"
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              show: { opacity: 1, y: 0 }
+            }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             {genre.name}
-          </button>
+          </motion.button>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 

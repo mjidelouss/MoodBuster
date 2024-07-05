@@ -1,4 +1,4 @@
-
+import { motion } from 'framer-motion';
 
 const moods = [
   'Cozy and Comforting',
@@ -31,20 +31,44 @@ interface MoodSelectorProps {
 
 function MoodSelector({ onMoodSelect }: MoodSelectorProps) {
   return (
-    <div className="mb-6">
-      <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-3">Select your mood:</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+    <motion.div 
+      className="mb-6"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-3 font-audiowide">Select your mood:</h2>
+      <motion.div 
+        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2"
+        variants={{
+          hidden: { opacity: 0 },
+          show: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.1
+            }
+          }
+        }}
+        initial="hidden"
+        animate="show"
+      >
         {moods.map(mood => (
-          <button
+          <motion.button
             key={mood}
             onClick={() => onMoodSelect(mood)}
             className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors dark:bg-green-700 dark:hover:bg-green-800 text-sm"
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              show: { opacity: 1, y: 0 }
+            }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             {mood}
-          </button>
+          </motion.button>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
