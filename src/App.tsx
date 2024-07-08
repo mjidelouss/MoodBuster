@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import MediaTypeSelector from './components/MediaTypeSelector/MediaTypeSelector';
 import MoodSelector from './components/MoodSelector/MoodSelector';
 import GenreSelector from './components/GenreSelector/GenreSelector';
 import MovieSuggestion from './components/MovieSuggestion/MovieSuggestion';
@@ -12,18 +13,13 @@ interface Genre {
 }
 
 function App() {
+  const [selectedMediaType, setSelectedMediaType] = useState<string | null>(null);
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
 
   const fadeIn = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 0.5 } }
-  };
-
-  const slideIn = {
-    hidden: { x: 300, opacity: 0 },
-    visible: { x: 0, opacity: 1, transition: { type: 'spring', stiffness: 260, damping: 20 } },
-    exit: { x: -300, opacity: 0 }
   };
 
   return (
@@ -44,28 +40,25 @@ function App() {
             >
               Mood Buster
             </motion.h1>
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <ThemeToggle />
-            </motion.div>
+            <ThemeToggle />
           </div>
           
           <AnimatePresence mode="wait">
             <motion.div
-              key={selectedMood ? (selectedGenre ? 'movie' : 'genre') : 'mood'}
-              variants={slideIn}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
+              key={selectedMediaType ? (selectedMood ? (selectedGenre ? 'suggestion' : 'genre') : 'mood') : 'mediaType'}
+              initial={{ x: 300, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -300, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 20 }}
             >
-              {!selectedMood ? (
+              {!selectedMediaType ? (
+                <MediaTypeSelector onMediaTypeSelect={setSelectedMediaType} />
+              ) : !selectedMood ? (
                 <MoodSelector onMoodSelect={setSelectedMood} />
               ) : !selectedGenre ? (
                 <GenreSelector onGenreSelect={setSelectedGenre} />
               ) : (
-                <MovieSuggestion mood={selectedMood} genre={selectedGenre} />
+                <MovieSuggestion mediaType={selectedMediaType} mood={selectedMood} genre={selectedGenre} />
               )}
             </motion.div>
           </AnimatePresence>

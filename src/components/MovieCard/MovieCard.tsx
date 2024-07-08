@@ -1,18 +1,24 @@
 import { motion } from 'framer-motion';
 
-interface Movie {
-  title: string;
+interface Media {
+  title?: string;
+  name?: string;
   poster_path: string;
-  release_date: string;
+  release_date?: string;
+  first_air_date?: string;
   vote_average: number;
   overview: string;
 }
 
 interface MovieCardProps {
-  movie: Movie;
+  media: Media;
+  mediaType: string;
 }
 
-function MovieCard({ movie }: MovieCardProps) {
+function MovieCard({ media, mediaType }: MovieCardProps) {
+  const title = media.title || media.name;
+  const releaseDate = media.release_date || media.first_air_date;
+
   return (
     <motion.div 
       className="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 shadow-md flex flex-col md:flex-row"
@@ -22,14 +28,14 @@ function MovieCard({ movie }: MovieCardProps) {
     >
       <div className="flex-1 md:mr-6 mb-4 md:mb-0">
         <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4 font-cinzel">
-          {movie.title}
+          {title}
         </h3>
         <div className="mb-2 flex items-center">
           <span className="inline-block bg-green-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
-            Release Date
+            {mediaType === 'TV Show' ? 'First Air Date' : 'Release Date'}
           </span>
           <span className="text-gray-700 dark:text-gray-300 font-cinzel">
-            {movie.release_date}
+            {releaseDate}
           </span>
         </div>
         <div className="mb-4 flex items-center">
@@ -37,16 +43,16 @@ function MovieCard({ movie }: MovieCardProps) {
             Rating
           </span>
           <span className="text-gray-700 dark:text-gray-300 font-cinzel">
-            {movie.vote_average.toFixed(1)}/10
+            {media.vote_average.toFixed(1)}/10
           </span>
         </div>
         <p className="text-gray-700 dark:text-gray-300 font-acme">
-          {movie.overview}
+          {media.overview}
         </p>
       </div>
       <motion.img
-        src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-        alt={movie.title}
+        src={`https://image.tmdb.org/t/p/w300${media.poster_path}`}
+        alt={title}
         className="w-48 h-auto rounded-lg"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}

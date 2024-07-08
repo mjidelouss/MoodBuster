@@ -4,16 +4,19 @@ import MovieCard from '../MovieCard/MovieCard';
 
 const API_KEY = '86cdb246bc2dfde7b16fa94055f4d2f5';
 
-interface Movie {
+interface Media {
   id: number;
-  title: string;
+  title?: string;
+  name?: string;
   poster_path: string;
-  release_date: string;
+  release_date?: string;
+  first_air_date?: string;
   vote_average: number;
   overview: string;
 }
 
 interface MovieSuggestionProps {
+  mediaType: string;
   mood: string;
   genre: { id: number; name: string };
 }
@@ -41,28 +44,32 @@ const moodToKeywordId: { [key: string]: number } = {
   'Mind-Bending and Twisty': 10052, // plot-twist
 };
 
-function MovieSuggestion({ mood, genre }: MovieSuggestionProps) {
-  const [movies, setMovies] = useState<Movie[]>([]);
+function MovieSuggestion({ mediaType, mood, genre }: MovieSuggestionProps) {
+  const [media, setMedia] = useState<Media[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchMovies = async () => {
+    const fetchMedia = async () => {
       setIsLoading(true);
       setError(null);
-      setMovies([]); // Clear previous results
+      setMedia([]); 
       setCurrentIndex(0);
     
       try {
         const keywordId = moodToKeywordId[mood];
-        let url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${genre.id}`;
+        let url = `https://api.themoviedb.org/3/discover/${mediaType === 'Movie' ? 'movie' : 'tv'}?api_key=${API_KEY}&with_genres=${genre.id}`;
         
         if (keywordId) {
           url += `&with_keywords=${keywordId}`;
         }
         
-        console.log('Fetching movies from:', url); // For debugging
+        if (mediaType === 'Anime') {
+          url += '&with_keywords=210024'; // Keyword ID for anime
+        }
+        
+        console.log('Fetching media from:', url); // For debugging
         
         const response = await fetch(url);
         if (!response.ok) {
@@ -71,37 +78,27 @@ function MovieSuggestion({ mood, genre }: MovieSuggestionProps) {
         const data = await response.json();
         
         if (data.results && data.results.length > 0) {
-          setMovies(data.results);
+          setMedia(data.results);
         } else {
-          // If no results, try again without keyword
-          url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${genre.id}`;
-          console.log('Retrying without keyword:', url); // For debugging
-          const retryResponse = await fetch(url);
-          const retryData = await retryResponse.json();
-          
-          if (retryData.results && retryData.results.length > 0) {
-            setMovies(retryData.results);
-          } else {
-            setError('No movies found for the selected mood and genre. Please try a different combination.');
-          }
+          setError(`No ${mediaType.toLowerCase()} found for the selected mood and genre. Please try a different combination.`);
         }
       } catch (e) {
-        console.error('Error fetching movies:', e);
-        setError('Failed to fetch movies. Please try again.');
+        console.error('Error fetching media:', e);
+        setError(`Failed to fetch ${mediaType.toLowerCase()}. Please try again.`);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchMovies();
-  }, [mood, genre]);
+    fetchMedia();
+  }, [mediaType, mood, genre]);
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % movies.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % media.length);
   };
 
   const handlePrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + movies.length) % movies.length);
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + media.length) % media.length);
   };
 
   if (isLoading) {
@@ -112,8 +109,8 @@ function MovieSuggestion({ mood, genre }: MovieSuggestionProps) {
     return <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center text-red-600 dark:text-red-400">{error}</motion.div>;
   }
 
-  if (movies.length === 0) {
-    return <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center text-gray-600 dark:text-gray-400">No movies found. Try a different mood or genre.</motion.div>;
+  if (media.length === 0) {
+    return <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center text-gray-600 dark:text-gray-400">No {mediaType.toLowerCase()} found. Try a different mood or genre.</motion.div>;
   }
 
   return (
@@ -123,17 +120,17 @@ function MovieSuggestion({ mood, genre }: MovieSuggestionProps) {
       transition={{ duration: 0.5 }}
     >
       <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4 font-acme">
-        Suggested movie for "<span className='text-tahiti'>{mood}</span>" mood and <span className='text-tahiti'>{genre.name}</span> genre:
+        Suggested {mediaType.toLowerCase()} for "<span className='text-tahiti'>{mood}</span>" mood and <span className='text-tahiti'>{genre.name}</span> genre:
       </h2>
       <AnimatePresence mode="wait">
         <motion.div
-          key={movies[currentIndex].id}
+          key={media[currentIndex].id}
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -100 }}
           transition={{ duration: 0.3 }}
         >
-          <MovieCard movie={movies[currentIndex]} />
+          <MovieCard media={media[currentIndex]} mediaType={mediaType} />
         </motion.div>
       </AnimatePresence>
       <motion.div 
