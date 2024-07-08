@@ -25,7 +25,7 @@ function MovieCard({ movie }: MovieCardProps) {
           {movie.title}
         </h3>
         <div className="mb-2 flex items-center">
-          <span className="inline-block bg-green-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-rampart">
+          <span className="inline-block bg-green-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
             Release Date
           </span>
           <span className="text-gray-700 dark:text-gray-300 font-cinzel">
@@ -33,7 +33,7 @@ function MovieCard({ movie }: MovieCardProps) {
           </span>
         </div>
         <div className="mb-4 flex items-center">
-          <span className="inline-block bg-blue-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-rampart">
+          <span className="inline-block bg-blue-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
             Rating
           </span>
           <span className="text-gray-700 dark:text-gray-300 font-cinzel">

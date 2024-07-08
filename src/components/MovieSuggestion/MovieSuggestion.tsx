@@ -18,8 +18,27 @@ interface MovieSuggestionProps {
   genre: { id: number; name: string };
 }
 
-const moodToKeywords: { [key: string]: string } = {
-  // ... (keep the existing mood to keywords mapping)
+const moodToKeywordId: { [key: string]: number } = {
+  'Cozy and Comforting': 10024, // cozy
+  'Adventure Craving': 1365,   // adventure
+  'Heartwarming and Uplifting': 9713, // heartwarming
+  'Intellectually Stimulating': 156205, // thought-provoking
+  'Nostalgic and Sentimental': 6054, // nostalgia
+  'Laugh Out Loud': 9675, // hilarious
+  'Edge of Your Seat': 10944, // suspense
+  'Mysteriously Intrigued': 9725, // mystery
+  'Feel-Good Escape': 5615, // feel-good
+  'Romantic and Dreamy': 9748, // romantic
+  'Epic and Grandiose': 4344, // epic
+  'Deep and Reflective': 156218, // philosophical
+  'Playful and Fun': 9663, // fun
+  'Thrill Seeker': 10663, // adrenaline
+  'Inspirational and Motivating': 165194, // inspirational
+  'Relaxed and Chill': 245728, // laid-back
+  'Imaginative and Fantastical': 9716, // fantasy
+  'Somber and Thought-Provoking': 15096, // melancholy
+  'Lighthearted and Breezy': 246716, // lighthearted
+  'Mind-Bending and Twisty': 10052, // plot-twist
 };
 
 function MovieSuggestion({ mood, genre }: MovieSuggestionProps) {
@@ -34,14 +53,16 @@ function MovieSuggestion({ mood, genre }: MovieSuggestionProps) {
       setError(null);
       setMovies([]); // Clear previous results
       setCurrentIndex(0);
-
+    
       try {
-        const keywords = moodToKeywords[mood] || '';
-        let url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${genre.id}&sort_by=popularity.desc`;
+        const keywordId = moodToKeywordId[mood];
+        let url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${genre.id}`;
         
-        if (keywords) {
-          url += `&with_keywords=${encodeURIComponent(keywords)}`;
+        if (keywordId) {
+          url += `&with_keywords=${keywordId}`;
         }
+        
+        console.log('Fetching movies from:', url); // For debugging
         
         const response = await fetch(url);
         if (!response.ok) {
@@ -52,15 +73,16 @@ function MovieSuggestion({ mood, genre }: MovieSuggestionProps) {
         if (data.results && data.results.length > 0) {
           setMovies(data.results);
         } else {
-          // If no results, try again without keywords
-          url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${genre.id}&sort_by=popularity.desc`;
+          // If no results, try again without keyword
+          url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${genre.id}`;
+          console.log('Retrying without keyword:', url); // For debugging
           const retryResponse = await fetch(url);
           const retryData = await retryResponse.json();
           
           if (retryData.results && retryData.results.length > 0) {
             setMovies(retryData.results);
           } else {
-            setError('No movies found for the selected genre. Please try a different combination.');
+            setError('No movies found for the selected mood and genre. Please try a different combination.');
           }
         }
       } catch (e) {
@@ -101,7 +123,7 @@ function MovieSuggestion({ mood, genre }: MovieSuggestionProps) {
       transition={{ duration: 0.5 }}
     >
       <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4 font-acme">
-        Suggested movie for "{mood}" mood and {genre.name} genre:
+        Suggested movie for "<span className='text-tahiti'>{mood}</span>" mood and <span className='text-tahiti'>{genre.name}</span> genre:
       </h2>
       <AnimatePresence mode="wait">
         <motion.div
@@ -122,7 +144,7 @@ function MovieSuggestion({ mood, genre }: MovieSuggestionProps) {
       >
         <motion.button
           onClick={handlePrevious}
-          className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors dark:bg-gray-700 dark:hover:bg-gray-800"
+          className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors dark:bg-gray-700 dark:hover:bg-gray-800 font-eater"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -130,7 +152,7 @@ function MovieSuggestion({ mood, genre }: MovieSuggestionProps) {
         </motion.button>
         <motion.button
           onClick={handleNext}
-          className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors dark:bg-gray-700 dark:hover:bg-gray-800"
+          className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors dark:bg-gray-700 dark:hover:bg-gray-800 font-eater"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
