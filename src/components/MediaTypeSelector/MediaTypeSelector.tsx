@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-const mediaTypes = ['Movie', 'TV Show', 'Anime'] as const;
+const mediaTypes = ['Movie', 'TV Show', 'Anime', 'Music', 'Book', 'Food', 'Drink', 'Podcast'] as const;
 
 type MediaType = typeof mediaTypes[number];
 
@@ -10,7 +10,7 @@ interface MediaTypeSelectorProps {
 
 function MediaTypeSelector({ onMediaTypeSelect }: MediaTypeSelectorProps) {
   return (
-    <motion.div 
+    <motion.div
       className="mb-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -35,7 +35,7 @@ function MediaTypeSelector({ onMediaTypeSelect }: MediaTypeSelectorProps) {
           <motion.button
             key={mediaType}
             onClick={() => onMediaTypeSelect(mediaType)}
-            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors dark:bg-red-700 dark:hover:bg-red-800 text-sm"
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-600 transition-colors dark:bg-red-700 dark:hover:bg-red-700 text-sm font-audiowide"
             variants={{
               hidden: { opacity: 0, y: 20 },
               show: { opacity: 1, y: 0 }

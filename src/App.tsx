@@ -2,20 +2,13 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MediaTypeSelector from './components/MediaTypeSelector/MediaTypeSelector';
 import MoodSelector from './components/MoodSelector/MoodSelector';
-import GenreSelector from './components/GenreSelector/GenreSelector';
 import MovieSuggestion from './components/MovieSuggestion/MovieSuggestion';
 import ThemeToggle from './components/ThemeToggle/ThemeToggle';
 import { ThemeProvider } from './contexts/ThemeContext';
 
-interface Genre {
-  id: number;
-  name: string;
-}
-
 function App() {
   const [selectedMediaType, setSelectedMediaType] = useState<string | null>(null);
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
-  const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
 
   const fadeIn = {
     hidden: { opacity: 0 },
@@ -45,7 +38,7 @@ function App() {
           
           <AnimatePresence mode="wait">
             <motion.div
-              key={selectedMediaType ? (selectedMood ? (selectedGenre ? 'suggestion' : 'genre') : 'mood') : 'mediaType'}
+              key={selectedMediaType ? (selectedMood ? 'suggestion' : 'mood') : 'mediaType'}
               initial={{ x: 300, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: -300, opacity: 0 }}
@@ -55,10 +48,8 @@ function App() {
                 <MediaTypeSelector onMediaTypeSelect={setSelectedMediaType} />
               ) : !selectedMood ? (
                 <MoodSelector onMoodSelect={setSelectedMood} />
-              ) : !selectedGenre ? (
-                <GenreSelector onGenreSelect={setSelectedGenre} />
               ) : (
-                <MovieSuggestion mediaType={selectedMediaType} mood={selectedMood} genre={selectedGenre} />
+                <MovieSuggestion mediaType={selectedMediaType} mood={selectedMood} />
               )}
             </motion.div>
           </AnimatePresence>

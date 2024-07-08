@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 
 interface Media {
+  id: number;
   title?: string;
   name?: string;
   poster_path: string;
@@ -8,6 +9,16 @@ interface Media {
   first_air_date?: string;
   vote_average: number;
   overview: string;
+  genres?: { id: number; name: string }[];
+  runtime?: number;
+  episode_run_time?: number[];
+  number_of_seasons?: number;
+  number_of_episodes?: number;
+  created_by?: { name: string }[];
+  credits?: {
+    cast: { name: string }[];
+    crew: { job: string; name: string }[];
+  };
 }
 
 interface MovieCardProps {
@@ -18,6 +29,9 @@ interface MovieCardProps {
 function MovieCard({ media, mediaType }: MovieCardProps) {
   const title = media.title || media.name;
   const releaseDate = media.release_date || media.first_air_date;
+
+  const director = media.credits?.crew.find(person => person.job === 'Director')?.name;
+  const cast = media.credits?.cast.slice(0, 5).map(actor => actor.name).join(', ');
 
   return (
     <motion.div 
@@ -38,14 +52,74 @@ function MovieCard({ media, mediaType }: MovieCardProps) {
             {releaseDate}
           </span>
         </div>
-        <div className="mb-4 flex items-center">
+        <div className="mb-2 flex items-center">
           <span className="inline-block bg-blue-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
             Rating
           </span>
-          <span className="text-gray-700 dark:text-gray-300 font-cinzel">
+          <span className="text-gray-700 dark:text-gray-300 font-acme">
             {media.vote_average.toFixed(1)}/10
           </span>
         </div>
+        {media.genres && (
+          <div className="mb-2 flex items-center">
+            <span className="inline-block bg-yellow-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+              Genres
+            </span>
+            <span className="text-gray-700 dark:text-gray-300 font-acme">
+              {media.genres.map(genre => genre.name).join(', ')}
+            </span>
+          </div>
+        )}
+        {(media.runtime || media.episode_run_time) && (
+          <div className="mb-2 flex items-center">
+            <span className="inline-block bg-red-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+              Runtime
+            </span>
+            <span className="text-gray-700 dark:text-gray-300 font-acme">
+              {media.runtime || media.episode_run_time?.[0]} minutes
+            </span>
+          </div>
+        )}
+        {mediaType !== 'Movie' && media.number_of_seasons && (
+          <div className="mb-2 flex items-center">
+            <span className="inline-block bg-yellow-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+              Seasons
+            </span>
+            <span className="text-gray-700 dark:text-gray-300 font-acme">
+              {media.number_of_seasons}
+            </span>
+          </div>
+        )}
+        {mediaType !== 'Movie' && media.number_of_episodes && (
+          <div className="mb-2 flex items-center">
+            <span className="inline-block bg-pink-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+              Episodes
+            </span>
+            <span className="text-gray-700 dark:text-gray-300 font-acme">
+              {media.number_of_episodes}
+            </span>
+          </div>
+        )}
+        {director && (
+          <div className="mb-2 flex items-center">
+            <span className="inline-block bg-indigo-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+              Director
+            </span>
+            <span className="text-gray-700 dark:text-gray-300 font-acme">
+              {director}
+            </span>
+          </div>
+        )}
+        {cast && (
+          <div className="mb-4 flex items-center">
+            <span className="inline-block bg-teal-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+              Cast
+            </span>
+            <span className="text-gray-700 dark:text-gray-300 font-acme">
+              {cast}
+            </span>
+          </div>
+        )}
         <p className="text-gray-700 dark:text-gray-300 font-acme">
           {media.overview}
         </p>
