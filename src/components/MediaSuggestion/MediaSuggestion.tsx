@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import MediaCard from '../MediaCard/MediaCard';
 
 const API_KEY = '86cdb246bc2dfde7b16fa94055f4d2f5';
-const API_BOOK_KEY = 'AIzaSyCU8JZZ88PS62pmnQqV_7tgBuf9cWOh9d8';
 const GOOGLE_BOOKS_API_BASE_URL = 'https://www.googleapis.com/books/v1/volumes';
+const TASTY_API_KEY = 'feea7bfaebmsh0b74d1a758c7e50p13a982jsne95dd58f8ff5';
 
 interface Media {
   id: string | number;
@@ -35,6 +35,13 @@ interface Media {
     smallThumbnail?: string;
   };
   infoLink?: string;
+  prep_time_minutes?: number;
+  cook_time_minutes?: number;
+  total_time_minutes?: number;
+  num_servings?: number;
+  tags?: string[];
+  ingredients?: string;
+  instructions?: string;
 }
 
 interface MediaSuggestionProps {
@@ -46,6 +53,52 @@ interface MoodMapping {
   keywords: number[];
   genres: number[];
 }
+
+const moodToFoodKeywords: { [key: string]: string[] } = {
+  'Cozy and Comforting': ['comfort food', 'soup', 'stew', 'casserole', 'pot pie'],
+  'Adventure Craving': ['exotic', 'spicy', 'fusion', 'international', 'street food'],
+  'Heartwarming and Uplifting': ['homemade', 'family recipe', 'wholesome', 'hearty'],
+  'Intellectually Stimulating': ['gourmet', 'complex', 'molecular gastronomy', 'artisanal'],
+  'Nostalgic and Sentimental': ['retro', 'childhood favorite', 'classic', 'vintage recipe'],
+  'Laugh Out Loud': ['fun food', 'colorful', 'whimsical', 'party snacks'],
+  'Edge of Your Seat': ['bold flavors', 'extreme spicy', 'unusual combinations'],
+  'Mysteriously Intrigued': ['secret ingredient', 'surprising flavor', 'hidden vegetable'],
+  'Feel-Good Escape': ['tropical', 'vacation food', 'beach snacks', 'resort cuisine'],
+  'Romantic and Dreamy': ['aphrodisiac', 'intimate dinner', 'chocolate', 'strawberries'],
+  'Epic and Grandiose': ['feast', 'banquet', 'luxurious', 'gourmet spread'],
+  'Deep and Reflective': ['slow food', 'mindful eating', 'balanced meal', 'buddha bowl'],
+  'Playful and Fun': ['finger food', 'interactive meal', 'DIY food', 'colorful dishes'],
+  'Thrill Seeker': ['extreme cuisine', 'dare food', 'unusual ingredients'],
+  'Inspirational and Motivating': ['superfood', 'energy boosting', 'protein-rich', 'clean eating'],
+  'Relaxed and Chill': ['easy recipes', 'no-cook meals', 'grazing platter', 'picnic food'],
+  'Imaginative and Fantastical': ['themed food', 'food art', 'edible landscape', 'fairytale inspired'],
+  'Somber and Thought-Provoking': ['comfort food', 'soul food', 'nostalgic dishes'],
+  'Lighthearted and Breezy': ['fresh salads', 'light bites', 'summer dishes', 'refreshing meals'],
+  'Mind-Bending and Twisty': ['deconstructed dishes', 'illusion food', 'surprise inside', 'color-changing']
+};
+
+const moodToDrinkKeywords: { [key: string]: string[] } = {
+  'Cozy and Comforting': ['hot chocolate', 'mulled wine', 'warm cider', 'herbal tea'],
+  'Adventure Craving': ['exotic cocktail', 'tropical smoothie', 'spiced beverages', 'international drinks'],
+  'Heartwarming and Uplifting': ['golden milk', 'fruit tea', 'homemade lemonade', 'chai latte'],
+  'Intellectually Stimulating': ['craft coffee', 'complex cocktail', 'artisanal tea', 'nootropic drinks'],
+  'Nostalgic and Sentimental': ['old fashioned soda', 'milkshake', 'malted drink', 'root beer float'],
+  'Laugh Out Loud': ['bubble tea', 'crazy milkshake', 'fun mocktail', 'soda float'],
+  'Edge of Your Seat': ['energy drink', 'strong coffee', 'spicy tomato juice', 'ginger shot'],
+  'Mysteriously Intrigued': ['color-changing drink', 'smoke-infused beverage', 'CBD drink', 'kombucha'],
+  'Feel-Good Escape': ['pina colada', 'tropical punch', 'coconut water', 'fruit smoothie'],
+  'Romantic and Dreamy': ['rose latte', 'champagne cocktail', 'aphrodisiac elixir', 'berry smoothie'],
+  'Epic and Grandiose': ['elaborate cocktail', 'premium spirits', 'aged wine', 'luxury coffee'],
+  'Deep and Reflective': ['matcha tea', 'meditation tonic', 'adaptogen latte', 'blue lotus tea'],
+  'Playful and Fun': ['slushie', 'milkshake', 'bubble tea', 'rainbow drink'],
+  'Thrill Seeker': ['extreme caffeine', 'strange flavor combination', 'dare shot challenge'],
+  'Inspirational and Motivating': ['green juice', 'protein shake', 'pre-workout drink', 'vitamin-infused water'],
+  'Relaxed and Chill': ['iced tea', 'lemonade', 'spritzer', 'decaf latte'],
+  'Imaginative and Fantastical': ['unicorn latte', 'galaxy drink', 'magic potion', 'color-changing cocktail'],
+  'Somber and Thought-Provoking': ['black coffee', 'dark tea', 'bitter aperitif', 'smoky whiskey'],
+  'Lighthearted and Breezy': ['fruit-infused water', 'sparkling juice', 'iced green tea', 'cucumber cooler'],
+  'Mind-Bending and Twisty': ['molecular mixology', 'deconstructed coffee', 'flavor-tripping cocktail', 'unexpected pairings']
+};
 
 const moodToBookKeywords: { [key: string]: string[] } = {
   'Cozy and Comforting': ['cozy', 'comfort reads'],
@@ -175,6 +228,16 @@ function MediaSuggestion({ mediaType, mood }: MediaSuggestionProps) {
           } else {
             setError('No books found for the selected mood. Please try a different mood.');
           }
+        } else if (mediaType === 'Food') {
+          const foods = await fetchFoodByMood(mood);
+          setMedia(foods);
+        } else if (mediaType === 'Drink') {
+          const drinks = await fetchDrinksByMood(mood);
+          if (drinks && drinks.length > 0) {
+            setMedia(drinks);
+          } else {
+            setError('No drinks found for the selected mood. Please try a different mood.');
+          }
         } else {
           const moodMapping = moodToMappingData[mood];
           if (!moodMapping) {
@@ -247,6 +310,67 @@ function MediaSuggestion({ mediaType, mood }: MediaSuggestionProps) {
 
     fetchMedia();
   }, [mediaType, mood]);
+
+  const fetchFoodByMood = async (mood: string) => {
+    const keywords = moodToFoodKeywords[mood] || [''];
+    const query = keywords[Math.floor(Math.random() * keywords.length)];
+    const url = `https://tasty.p.rapidapi.com/recipes/list?from=0&size=20&q=${encodeURIComponent(query)}`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': TASTY_API_KEY,
+        'X-RapidAPI-Host': 'tasty.p.rapidapi.com'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    
+    return data.results.map((item: any) => ({
+      id: item.id,
+      title: item.name,
+      image: item.thumbnail_url,
+      description: item.description || `A delicious dish that perfectly matches your ${mood} mood.`,
+      total_time_minutes: item.total_time_minutes,
+      num_servings: item.num_servings,
+      tags: item.tags?.map((tag: any) => tag.name) || [],
+      ingredients: item.sections?.[0]?.components?.map((component: any) => component.raw_text).join(', ') || 'No ingredients available.',
+      instructions: item.instructions?.map((instruction: any) => instruction.display_text).join(' ') || 'No instructions available.'
+    }));
+  };
+
+  const fetchDrinksByMood = async (mood: string) => {
+    const drinkKeywords = moodToDrinkKeywords[mood] || ['cocktail', 'smoothie', 'beverage', 'drink'];
+    const query = drinkKeywords[Math.floor(Math.random() * drinkKeywords.length)];
+    const url = `https://tasty.p.rapidapi.com/recipes/list?from=0&size=20&q=${encodeURIComponent(query)}`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': TASTY_API_KEY,
+        'X-RapidAPI-Host': 'tasty.p.rapidapi.com'
+      }
+    });
+  
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();  
+    return data.results.map((item: any) => ({
+      id: item.id,
+      title: item.name,
+      image: item.thumbnail_url,
+      description: item.description || `A refreshing drink that complements your ${mood} mood.`,
+      total_time_minutes: item.total_time_minutes,
+      num_servings: item.num_servings,
+      tags: item.tags?.map((tag: any) => tag.name) || [],
+      ingredients: item.sections?.[0]?.components?.map((component: any) => component.raw_text).join(', ') || 'No ingredients available.',
+      instructions: item.instructions?.map((instruction: any) => instruction.display_text).join(' ') || 'No instructions available.'
+    }));
+  };
 
   const fetchBooksByMood = async (mood: string) => {
     const keywords = moodToBookKeywords[mood] || [];

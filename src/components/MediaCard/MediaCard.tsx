@@ -31,6 +31,14 @@ interface Media {
     smallThumbnail?: string;
   };
   infoLink?: string;
+  image?: string;
+  prep_time_minutes?: number;
+  cook_time_minutes?: number;
+  total_time_minutes?: number;
+  num_servings?: number;
+  tags?: string[];
+  ingredients?: string;
+  instructions?: string;
 }
 
 interface MediaCardProps {
@@ -40,7 +48,6 @@ interface MediaCardProps {
 
 function MediaCard({ media, mediaType }: MediaCardProps) {
   const title = media.title || media.name;
-  const releaseDate = media.release_date || media.first_air_date || media.publishedDate;
   const description = media.overview || media.description;
 
   const director = media.credits?.crew.find(person => person.job === 'Director')?.name;
@@ -49,12 +56,16 @@ function MediaCard({ media, mediaType }: MediaCardProps) {
   const getImageUrl = () => {
     if (mediaType === 'Book') {
       return media.imageLinks?.thumbnail || media.imageLinks?.smallThumbnail;
+    } else if (mediaType === 'Food' || mediaType === 'Drink') {
+      return media.image;
     } else {
       return media.poster_path ? `https://image.tmdb.org/t/p/w300${media.poster_path}` : null;
     }
   };
 
   const imageUrl = getImageUrl();
+
+  const limitedTags = media.tags?.slice(0, 3) || [];
 
   return (
     <motion.div 
@@ -67,14 +78,70 @@ function MediaCard({ media, mediaType }: MediaCardProps) {
         <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4 font-cinzel">
           {title}
         </h3>
-        <div className="mb-2 flex items-center">
-          <span className="inline-block bg-green-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
-            {mediaType === 'Book' ? 'Published Date' : mediaType === 'TV Show' ? 'First Air Date' : 'Release Date'}
-          </span>
-          <span className="text-gray-700 dark:text-gray-300 font-cinzel">
-            {releaseDate}
-          </span>
-        </div>
+        {(mediaType === 'Food' || mediaType === 'Drink') && (
+          <>
+            {media.total_time_minutes && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-yellow-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Total Time
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {media.total_time_minutes} minutes
+                </span>
+              </div>
+            )}
+            {media.num_servings && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-green-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Servings
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {media.num_servings}
+                </span>
+              </div>
+            )}
+            {limitedTags.length > 0 && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-blue-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Tags
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {limitedTags.join(', ')}
+                </span>
+              </div>
+            )}
+            {media.ingredients && (
+              <div className="mb-2">
+                <span className="inline-block bg-red-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Ingredients
+                </span>
+                <p className="text-gray-700 dark:text-gray-300 font-acme mt-1">
+                  {media.ingredients}
+                </p>
+              </div>
+            )}
+            {media.instructions && (
+              <div className="mb-2">
+                <span className="inline-block bg-pink-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Instructions
+                </span>
+                <p className="text-gray-700 dark:text-gray-300 font-acme mt-1">
+                  {media.instructions}
+                </p>
+              </div>
+            )}
+          </>
+        )}
+        {mediaType !== 'Food' && mediaType !== 'Drink' && media.release_date && (
+          <div className="mb-2 flex items-center">
+            <span className="inline-block bg-green-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+              {mediaType === 'Book' ? 'Published Date' : mediaType === 'TV Show' ? 'First Air Date' : 'Release Date'}
+            </span>
+            <span className="text-gray-700 dark:text-gray-300 font-cinzel">
+              {media.release_date}
+            </span>
+          </div>
+        )}
         {mediaType === 'Book' && media.authors && (
           <div className="mb-2 flex items-center">
             <span className="inline-block bg-red-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
@@ -181,7 +248,7 @@ function MediaCard({ media, mediaType }: MediaCardProps) {
       </div>
       {imageUrl && (
         <motion.div
-          className={`flex-shrink-0 ${mediaType === 'Book' ? 'w-48 h-64' : 'w-48'}`}
+          className="flex-shrink-0 w-48 h-48"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -189,7 +256,7 @@ function MediaCard({ media, mediaType }: MediaCardProps) {
           <img
             src={imageUrl}
             alt={title}
-            className={`rounded-lg ${mediaType === 'Book' ? 'w-full h-full object-cover' : 'w-full h-auto'}`}
+            className="rounded-lg w-full h-full object-cover"
           />
         </motion.div>
       )}
