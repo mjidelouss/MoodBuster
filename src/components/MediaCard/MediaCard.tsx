@@ -1,14 +1,16 @@
+// MediaCard.tsx
+
 import { motion } from 'framer-motion';
 
 interface Media {
-  id: number;
+  id: string | number;
   title?: string;
   name?: string;
-  poster_path: string;
+  poster_path?: string;
   release_date?: string;
   first_air_date?: string;
-  vote_average: number;
-  overview: string;
+  vote_average?: number;
+  overview?: string;
   genres?: { id: number; name: string }[];
   runtime?: number;
   episode_run_time?: number[];
@@ -19,19 +21,40 @@ interface Media {
     cast: { name: string }[];
     crew: { job: string; name: string }[];
   };
+  authors?: string[];
+  publishedDate?: string;
+  description?: string;
+  categories?: string[];
+  averageRating?: number;
+  imageLinks?: {
+    thumbnail?: string;
+    smallThumbnail?: string;
+  };
+  infoLink?: string;
 }
 
-interface MovieCardProps {
+interface MediaCardProps {
   media: Media;
   mediaType: string;
 }
 
-function MovieCard({ media, mediaType }: MovieCardProps) {
+function MediaCard({ media, mediaType }: MediaCardProps) {
   const title = media.title || media.name;
-  const releaseDate = media.release_date || media.first_air_date;
+  const releaseDate = media.release_date || media.first_air_date || media.publishedDate;
+  const description = media.overview || media.description;
 
   const director = media.credits?.crew.find(person => person.job === 'Director')?.name;
   const cast = media.credits?.cast.slice(0, 5).map(actor => actor.name).join(', ');
+
+  const getImageUrl = () => {
+    if (mediaType === 'Book') {
+      return media.imageLinks?.thumbnail || media.imageLinks?.smallThumbnail;
+    } else {
+      return media.poster_path ? `https://image.tmdb.org/t/p/w300${media.poster_path}` : null;
+    }
+  };
+
+  const imageUrl = getImageUrl();
 
   return (
     <motion.div 
@@ -46,20 +69,42 @@ function MovieCard({ media, mediaType }: MovieCardProps) {
         </h3>
         <div className="mb-2 flex items-center">
           <span className="inline-block bg-green-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
-            {mediaType === 'TV Show' ? 'First Air Date' : 'Release Date'}
+            {mediaType === 'Book' ? 'Published Date' : mediaType === 'TV Show' ? 'First Air Date' : 'Release Date'}
           </span>
           <span className="text-gray-700 dark:text-gray-300 font-cinzel">
             {releaseDate}
           </span>
         </div>
-        <div className="mb-2 flex items-center">
-          <span className="inline-block bg-blue-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
-            Rating
-          </span>
-          <span className="text-gray-700 dark:text-gray-300 font-acme">
-            {media.vote_average.toFixed(1)}/10
-          </span>
-        </div>
+        {mediaType === 'Book' && media.authors && (
+          <div className="mb-2 flex items-center">
+            <span className="inline-block bg-red-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+              Author(s)
+            </span>
+            <span className="text-gray-700 dark:text-gray-300 font-acme">
+              {media.authors.join(', ')}
+            </span>
+          </div>
+        )}
+        {mediaType === 'Book' && media.categories && (
+          <div className="mb-2 flex items-center">
+            <span className="inline-block bg-yellow-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+              Categories
+            </span>
+            <span className="text-gray-700 dark:text-gray-300 font-acme">
+              {media.categories.join(', ')}
+            </span>
+          </div>
+        )}
+        {(media.averageRating || media.vote_average) && (
+          <div className="mb-2 flex items-center">
+            <span className="inline-block bg-blue-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+              Rating
+            </span>
+            <span className="text-gray-700 dark:text-gray-300 font-acme">
+              {media.averageRating ? `${media.averageRating.toFixed(1)}/5` : `${media.vote_average?.toFixed(1)}/10`}
+            </span>
+          </div>
+        )}
         {media.genres && (
           <div className="mb-2 flex items-center">
             <span className="inline-block bg-yellow-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
@@ -80,7 +125,7 @@ function MovieCard({ media, mediaType }: MovieCardProps) {
             </span>
           </div>
         )}
-        {mediaType !== 'Movie' && media.number_of_seasons && (
+        {mediaType === 'TV Show' && media.number_of_seasons && (
           <div className="mb-2 flex items-center">
             <span className="inline-block bg-yellow-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
               Seasons
@@ -90,7 +135,7 @@ function MovieCard({ media, mediaType }: MovieCardProps) {
             </span>
           </div>
         )}
-        {mediaType !== 'Movie' && media.number_of_episodes && (
+        {mediaType === 'TV Show' && media.number_of_episodes && (
           <div className="mb-2 flex items-center">
             <span className="inline-block bg-pink-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
               Episodes
@@ -121,19 +166,35 @@ function MovieCard({ media, mediaType }: MovieCardProps) {
           </div>
         )}
         <p className="text-gray-700 dark:text-gray-300 font-acme">
-          {media.overview}
+          {description}
         </p>
+        {mediaType === 'Book' && media.infoLink && (
+          <a 
+            href={media.infoLink} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors font-audiowide"
+          >
+            More Info
+          </a>
+        )}
       </div>
-      <motion.img
-        src={`https://image.tmdb.org/t/p/w300${media.poster_path}`}
-        alt={title}
-        className="w-48 h-auto rounded-lg"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      />
+      {imageUrl && (
+        <motion.div
+          className={`flex-shrink-0 ${mediaType === 'Book' ? 'w-48 h-64' : 'w-48'}`}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <img
+            src={imageUrl}
+            alt={title}
+            className={`rounded-lg ${mediaType === 'Book' ? 'w-full h-full object-cover' : 'w-full h-auto'}`}
+          />
+        </motion.div>
+      )}
     </motion.div>
   );
 }
 
-export default MovieCard;
+export default MediaCard;

@@ -56,7 +56,7 @@ function MoodSelector({ onMoodSelect }: MoodSelectorProps) {
           <motion.button
             key={mood}
             onClick={() => onMoodSelect(mood)}
-            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors dark:bg-green-700 dark:hover:bg-green-800 text-sm font-audiowide"
+            className="px-4 py-2 bg-transparent hover:bg-blue-500 text-blue-500 font-semibold hover:text-white border border-blue-500 hover:border-transparent rounded transition-colors text-sm font-audiowide"
             variants={{
               hidden: { opacity: 0, y: 20 },
               show: { opacity: 1, y: 0 }

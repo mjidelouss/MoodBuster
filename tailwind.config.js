@@ -22,6 +22,7 @@ module.exports = {
         honk: ['Honk', 'sans-serif'],
         rampart: ['Rampart', 'sans-serif'],
         eater: ['Eater', 'sans-serif'],
+        ang:  ['Angkor', 'sans-serif'],
       },
     },
   },

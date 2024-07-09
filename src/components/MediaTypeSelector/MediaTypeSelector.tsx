@@ -11,12 +11,12 @@ interface MediaTypeSelectorProps {
 function MediaTypeSelector({ onMediaTypeSelect }: MediaTypeSelectorProps) {
   return (
     <motion.div
-      className="mb-6"
+      className="mb-6 mt-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-3 font-audiowide">Select media type:</h2>
+      <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4 mt-6 font-audiowide text-center">How are you feeling now?</h2>
       <motion.div 
         className="flex justify-center space-x-4"
         variants={{
@@ -35,7 +35,7 @@ function MediaTypeSelector({ onMediaTypeSelect }: MediaTypeSelectorProps) {
           <motion.button
             key={mediaType}
             onClick={() => onMediaTypeSelect(mediaType)}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-600 transition-colors dark:bg-red-700 dark:hover:bg-red-700 text-sm font-audiowide"
+            className="px-4 py-2 bg-transparent hover:bg-red-500 text-red-500 font-semibold hover:text-white border border-red-500 hover:border-transparent rounded transition-colors text-sm font-audiowide"
             variants={{
               hidden: { opacity: 0, y: 20 },
               show: { opacity: 1, y: 0 }
