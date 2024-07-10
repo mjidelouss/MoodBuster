@@ -9,6 +9,28 @@ import { ThemeProvider } from './contexts/ThemeContext';
 function App() {
   const [selectedMediaType, setSelectedMediaType] = useState<string | null>(null);
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
+  const [step, setStep] = useState('mediaSelection');
+
+  const handleMediaTypeSelect = (mediaType: string) => {
+    setSelectedMediaType(mediaType);
+    setStep('moodSelection');
+  };
+
+  const handleMoodSelect = (mood: string) => {
+    setSelectedMood(mood);
+    setStep('suggestion');
+  };
+
+  const handleReturnToMediaSelection = () => {
+    setSelectedMediaType(null);
+    setSelectedMood(null);
+    setStep('mediaSelection');
+  };
+
+  const handleReturnToMoodSelection = () => {
+    setSelectedMood(null);
+    setStep('moodSelection');
+  };
 
   const fadeIn = {
     hidden: { opacity: 0 },
@@ -37,7 +59,7 @@ function App() {
           </div>
 
           <div className='flex justify-center mb-6 mt-6'>
-          <motion.h2
+            <motion.h2
               className="text-3xl font-bold text-gray-800 dark:text-white font-ang"
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -49,18 +71,25 @@ function App() {
           
           <AnimatePresence mode="wait">
             <motion.div
-              key={selectedMediaType ? (selectedMood ? 'suggestion' : 'mood') : 'mediaType'}
+              key={step}
               initial={{ x: 300, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: -300, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 260, damping: 20 }}
             >
-              {!selectedMediaType ? (
-                <MediaTypeSelector onMediaTypeSelect={setSelectedMediaType} />
-              ) : !selectedMood ? (
-                <MoodSelector onMoodSelect={setSelectedMood} />
-              ) : (
-                <MovieSuggestion mediaType={selectedMediaType} mood={selectedMood} />
+              {step === 'mediaSelection' && (
+                <MediaTypeSelector onMediaTypeSelect={handleMediaTypeSelect} />
+              )}
+              {step === 'moodSelection' && (
+                <MoodSelector onMoodSelect={handleMoodSelect} />
+              )}
+              {step === 'suggestion' && selectedMediaType && selectedMood && (
+                <MovieSuggestion 
+                  mediaType={selectedMediaType} 
+                  mood={selectedMood} 
+                  onReturnToMediaSelection={handleReturnToMediaSelection}
+                  onReturnToMoodSelection={handleReturnToMoodSelection}
+                />
               )}
             </motion.div>
           </AnimatePresence>

@@ -47,6 +47,8 @@ interface Media {
 interface MediaSuggestionProps {
   mediaType: string;
   mood: string;
+  onReturnToMediaSelection: () => void;
+  onReturnToMoodSelection: () => void;
 }
 
 interface MoodMapping {
@@ -206,7 +208,7 @@ const moodToMappingData: { [key: string]: MoodMapping } = {
   },
 };
 
-function MediaSuggestion({ mediaType, mood }: MediaSuggestionProps) {
+function MediaSuggestion({ mediaType, mood, onReturnToMediaSelection, onReturnToMoodSelection }: MediaSuggestionProps) {
   const [media, setMedia] = useState<Media[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -473,6 +475,29 @@ function MediaSuggestion({ mediaType, mood }: MediaSuggestionProps) {
           whileTap={{ scale: 0.95 }}
         >
           Next
+        </motion.button>
+      </motion.div>
+      <motion.div 
+        className="flex justify-center mt-6 space-x-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+      >
+        <motion.button
+          onClick={onReturnToMediaSelection}
+          className="bg-transparent hover:bg-blue-600 text-blue-700 hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded font-ang"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Back To Start
+        </motion.button>
+        <motion.button
+          onClick={onReturnToMoodSelection}
+          className="bg-transparent hover:bg-green-600 text-green-700 hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded font-ang"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Change Mood
         </motion.button>
       </motion.div>
     </motion.div>
