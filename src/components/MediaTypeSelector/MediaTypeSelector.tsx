@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-const mediaTypes = ['Movie', 'TV Show', 'Anime', 'Music', 'Book', 'Food', 'Drink', 'Podcast'] as const;
+const mediaTypes = ['Movie', 'TV Show', 'Anime', 'Music', 'Book', 'Food', 'Drink', 'Playlist', 'Podcast', 'Exercice', 'Video Game'] as const;
 
 type MediaType = typeof mediaTypes[number];
 

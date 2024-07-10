@@ -49,6 +49,22 @@ interface Media {
   track_number?: number;
   disc_number?: number;
   external_urls?: { spotify: string };
+  owner?: string;
+  coverArt?: {
+    sources: {
+      url: string;
+      width: number;
+      height: number;
+    }[];
+  };
+  publisher?: {name: string;} | string;
+  type?: string;
+  mediaType?: string;
+  platforms?: string[];
+  rating?: number;
+  developer?: string;
+  gameMode?: string;
+  coverUrl?: string;
 }
 
 interface MediaCardProps {
@@ -69,12 +85,25 @@ function MediaCard({ media, mediaType }: MediaCardProps) {
     .join(", ");
 
   const getImageUrl = () => {
-    if (mediaType === "Book") {
+    if (mediaType === "Game") {
+      return media.coverUrl || null;
+    } else if (mediaType === "Book") {
       return media.imageLinks?.thumbnail || media.imageLinks?.smallThumbnail;
     } else if (mediaType === "Food" || mediaType === "Drink") {
       return media.image;
-    } else if (mediaType === "Music") {
-      return media.image;
+    } else if (
+      mediaType === "Music" ||
+      mediaType === "Playlist" ||
+      mediaType === "Podcast"
+    ) {
+      if (media.coverArt && media.coverArt.sources) {
+        // Sort sources by size (descending) and get the largest
+        const sortedSources = [...media.coverArt.sources].sort(
+          (a, b) => b.width * b.height - a.width * a.height
+        );
+        return sortedSources[0].url;
+      }
+      return media.image || null;
     } else {
       return media.poster_path
         ? `https://image.tmdb.org/t/p/w300${media.poster_path}`
@@ -103,6 +132,98 @@ function MediaCard({ media, mediaType }: MediaCardProps) {
         <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4 font-cinzel">
           {title}
         </h3>
+        {mediaType === "Game" && (
+          <>
+            {media.platforms && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-purple-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Platforms
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {media.platforms.join(", ")}
+                </span>
+              </div>
+            )}
+            {media.developer && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-indigo-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Developer
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {media.developer}
+                </span>
+              </div>
+            )}
+            {media.publisher && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-blue-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Publisher
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                {typeof media.publisher === 'string' ? media.publisher : media.publisher.name}
+                </span>
+              </div>
+            )}
+            {media.gameMode && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-green-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Game Mode
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {media.gameMode}
+                </span>
+              </div>
+            )}
+          </>
+        )}
+        {mediaType === "Podcast" && (
+          <>
+            {media.publisher && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-red-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Publisher
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                {typeof media.publisher === 'string' ? media.publisher : media.publisher.name}
+                </span>
+              </div>
+            )}
+            {media.type && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-blue-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Type
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {media.type}
+                </span>
+              </div>
+            )}
+            {media.mediaType && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-green-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Media Type
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {media.mediaType}
+                </span>
+              </div>
+            )}
+          </>
+        )}
+        {mediaType === "Playlist" && (
+          <>
+            {media.owner && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-red-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Owner
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {media.owner}
+                </span>
+              </div>
+            )}
+          </>
+        )}
         {mediaType === "Music" && (
           <>
             <div className="mb-2 flex items-center">
@@ -378,6 +499,17 @@ function MediaCard({ media, mediaType }: MediaCardProps) {
         <p className="text-gray-700 dark:text-gray-300 font-acme">
           {description}
         </p>
+        {(mediaType === "Playlist" || mediaType === "Podcast") &&
+          media.external_urls?.spotify && (
+            <a
+              href={media.external_urls.spotify}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors font-audiowide"
+            >
+              Open in Spotify
+            </a>
+          )}
         {mediaType === "Book" && media.infoLink && (
           <a
             href={media.infoLink}
