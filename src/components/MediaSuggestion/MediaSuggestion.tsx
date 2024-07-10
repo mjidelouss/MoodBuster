@@ -42,6 +42,16 @@ interface Media {
   tags?: string[];
   ingredients?: string;
   instructions?: string;
+  artists?: string;
+  album?: string;
+  releaseDate?: string;
+  preview_url?: string;
+  duration_ms?: number;
+  popularity?: number;
+  explicit?: boolean;
+  track_number?: number;
+  disc_number?: number;
+  external_urls?: { spotify: string };
 }
 
 interface MediaSuggestionProps {
@@ -55,6 +65,29 @@ interface MoodMapping {
   keywords: number[];
   genres: number[];
 }
+
+const moodToMusicKeywords: { [key: string]: string[] } = {
+  'Cozy and Comforting': ['acoustic', 'folk', 'indie-folk'],
+  'Adventure Craving': ['rock', 'indie-rock', 'alternative'],
+  'Heartwarming and Uplifting': ['pop', 'feel-good', 'happy'],
+  'Intellectually Stimulating': ['classical', 'jazz', 'instrumental'],
+  'Nostalgic and Sentimental': ['oldies', 'vintage', '80s', '90s'],
+  'Laugh Out Loud': ['comedy', 'novelty', 'fun'],
+  'Edge of Your Seat': ['metal', 'punk', 'hard-rock'],
+  'Mysteriously Intrigued': ['ambient', 'electronic', 'trip-hop'],
+  'Feel-Good Escape': ['tropical', 'summer', 'dance-pop'],
+  'Romantic and Dreamy': ['r-n-b', 'soul', 'love'],
+  'Epic and Grandiose': ['epic', 'soundtrack', 'orchestral'],
+  'Deep and Reflective': ['singer-songwriter', 'indie', 'chill'],
+  'Playful and Fun': ['party', 'dance', 'disco'],
+  'Thrill Seeker': ['edm', 'dubstep', 'drum-and-bass'],
+  'Inspirational and Motivating': ['power-pop', 'gospel', 'motivational'],
+  'Relaxed and Chill': ['lofi', 'chillout', 'relaxative'],
+  'Imaginative and Fantastical': ['psychedelic', 'prog-rock', 'art rock'],
+  'Somber and Thought-Provoking': ['sad', 'melancholy', 'blues'],
+  'Lighthearted and Breezy': ['bossa-nova', 'reggae', 'ska'],
+  'Mind-Bending and Twisty': ['experimental', 'avant-garde', 'idm']
+};
 
 const moodToFoodKeywords: { [key: string]: string[] } = {
   'Cozy and Comforting': ['comfort food', 'soup', 'stew', 'casserole', 'pot pie'],
@@ -222,7 +255,14 @@ function MediaSuggestion({ mediaType, mood, onReturnToMediaSelection, onReturnTo
       setCurrentIndex(0);
     
       try {
-        if (mediaType === 'Book') {
+        if (mediaType === 'Music') {
+          const musicTracks = await fetchMusicByMood(mood);
+          if (musicTracks && musicTracks.length > 0) {
+            setMedia(musicTracks);
+          } else {
+            setError('No music found for the selected mood. Please try a different mood.');
+          }
+        } else if (mediaType === 'Book') {
           const books = await fetchBooksByMood(mood);
           console.log('Fetched books:', books);
           if (books && books.length > 0) {
@@ -312,6 +352,50 @@ function MediaSuggestion({ mediaType, mood, onReturnToMediaSelection, onReturnTo
 
     fetchMedia();
   }, [mediaType, mood]);
+
+  function shuffleArray<T>(array: T[]): T[] {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  async function fetchMusicByMood(mood: string): Promise<Media[]> {
+    const genres = moodToMusicKeywords[mood] || ['pop'];
+    const genre = genres[Math.floor(Math.random() * genres.length)];
+    const url = `https://spotify23.p.rapidapi.com/search/?type=multi&offset=0&limit=50&numberOfTopResults=5&q=genre:${encodeURIComponent(genre)}`;
+  
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'x-rapidapi-key': 'feea7bfaebmsh0b74d1a758c7e50p13a982jsne95dd58f8ff5',
+        'x-rapidapi-host': 'spotify23.p.rapidapi.com'
+      }
+    });
+  
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+  
+    if (!data.tracks || !data.tracks.items || data.tracks.items.length === 0) {
+      throw new Error('No tracks found for the selected mood.');
+    }
+  
+    return shuffleArray(data.tracks.items.map((item: any) => ({
+      id: item.data.id,
+      title: item.data.name,
+      artists: item.data.artists.items.map((artist: any) => artist.profile.name).join(', '),
+      album: item.data.albumOfTrack.name,
+      releaseDate: item.data.albumOfTrack.releases?.items[0]?.date?.year,
+      image: item.data.albumOfTrack.coverArt.sources[0].url,
+      preview_url: item.data.previews?.audioPreview?.url,
+      duration_ms: item.data.duration.totalMilliseconds,
+      explicit: item.data.contentRating.label === 'EXPLICIT',
+      external_urls: { spotify: `https://open.spotify.com/track/${item.data.id}` }
+    })));
+  };
 
   const fetchFoodByMood = async (mood: string) => {
     const keywords = moodToFoodKeywords[mood] || [''];

@@ -1,0 +1,543 @@
+{
+    "tracks": {
+        "totalCount": 108,
+        "items": [
+            {
+                "data": {
+                    "uri": "spotify:track:2K7xn816oNHJZ0aVqdQsha",
+                    "id": "2K7xn816oNHJZ0aVqdQsha",
+                    "name": "Softcore",
+                    "albumOfTrack": {
+                        "uri": "spotify:album:0ODLCdHBFVvKwJGeSfd1jy",
+                        "name": "Hard To Imagine The Neighbourhood Ever Changing",
+                        "coverArt": {
+                            "sources": [
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d00001e029b6ac98a52f62d5cb473da40",
+                                    "width": 300,
+                                    "height": 300
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d000048519b6ac98a52f62d5cb473da40",
+                                    "width": 64,
+                                    "height": 64
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d0000b2739b6ac98a52f62d5cb473da40",
+                                    "width": 640,
+                                    "height": 640
+                                }
+                            ]
+                        },
+                        "id": "0ODLCdHBFVvKwJGeSfd1jy",
+                        "sharingInfo": {
+                            "shareUrl": "https://open.spotify.com/album/0ODLCdHBFVvKwJGeSfd1jy?si=pWYJLQw3Sw6RUiB3JUn7GA"
+                        }
+                    },
+                    "artists": {
+                        "items": [
+                            {
+                                "uri": "spotify:artist:77SW9BnxLY8rJ0RciFqkHh",
+                                "profile": {
+                                    "name": "The Neighbourhood"
+                                }
+                            }
+                        ]
+                    },
+                    "contentRating": {
+                        "label": "NONE"
+                    },
+                    "duration": {
+                        "totalMilliseconds": 206280
+                    },
+                    "playability": {
+                        "playable": true
+                    }
+                }
+            },
+            {
+                "data": {
+                    "uri": "spotify:track:7DqRtx3iWhTVEfPL4feQNs",
+                    "id": "7DqRtx3iWhTVEfPL4feQNs",
+                    "name": "Soft Corals",
+                    "albumOfTrack": {
+                        "uri": "spotify:album:5PStymsZrftcSxP5rO2hgF",
+                        "name": "Soft Corals",
+                        "coverArt": {
+                            "sources": [
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d00001e0275db7365dfb8d4fad6149311",
+                                    "width": 300,
+                                    "height": 300
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d0000485175db7365dfb8d4fad6149311",
+                                    "width": 64,
+                                    "height": 64
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d0000b27375db7365dfb8d4fad6149311",
+                                    "width": 640,
+                                    "height": 640
+                                }
+                            ]
+                        },
+                        "id": "5PStymsZrftcSxP5rO2hgF",
+                        "sharingInfo": {
+                            "shareUrl": "https://open.spotify.com/album/5PStymsZrftcSxP5rO2hgF?si=kfgaZT8ITvCZfi1UHoNKBw"
+                        }
+                    },
+                    "artists": {
+                        "items": [
+                            {
+                                "uri": "spotify:artist:4YoqgU4m9qY7tUO4iwIM45",
+                                "profile": {
+                                    "name": "Gateway IV"
+                                }
+                            }
+                        ]
+                    },
+                    "contentRating": {
+                        "label": "NONE"
+                    },
+                    "duration": {
+                        "totalMilliseconds": 192750
+                    },
+                    "playability": {
+                        "playable": true
+                    }
+                }
+            },
+            {
+                "data": {
+                    "uri": "spotify:track:0YQJoDL6f46J0n1rOVkpxJ",
+                    "id": "0YQJoDL6f46J0n1rOVkpxJ",
+                    "name": "Softly",
+                    "albumOfTrack": {
+                        "uri": "spotify:album:3BGU0BqGwBkYDHpfCWFm7I",
+                        "name": "Making Memories",
+                        "coverArt": {
+                            "sources": [
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d00001e02bb25239324c4e16ae01fda36",
+                                    "width": 300,
+                                    "height": 300
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d00004851bb25239324c4e16ae01fda36",
+                                    "width": 64,
+                                    "height": 64
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d0000b273bb25239324c4e16ae01fda36",
+                                    "width": 640,
+                                    "height": 640
+                                }
+                            ]
+                        },
+                        "id": "3BGU0BqGwBkYDHpfCWFm7I",
+                        "sharingInfo": {
+                            "shareUrl": "https://open.spotify.com/album/3BGU0BqGwBkYDHpfCWFm7I?si=cYz1mw_QSWKUWmtzjiJCIw"
+                        }
+                    },
+                    "artists": {
+                        "items": [
+                            {
+                                "uri": "spotify:artist:6DARBhWbfcS9E4yJzcliqQ",
+                                "profile": {
+                                    "name": "Karan Aujla"
+                                }
+                            },
+                            {
+                                "uri": "spotify:artist:3nqS8jzqmsPKFJTp0BOIel",
+                                "profile": {
+                                    "name": "Ikky"
+                                }
+                            }
+                        ]
+                    },
+                    "contentRating": {
+                        "label": "NONE"
+                    },
+                    "duration": {
+                        "totalMilliseconds": 155161
+                    },
+                    "playability": {
+                        "playable": true
+                    }
+                }
+            },
+            {
+                "data": {
+                    "uri": "spotify:track:3IKUHOBOktlBP6kryzg1AS",
+                    "id": "3IKUHOBOktlBP6kryzg1AS",
+                    "name": "Soft",
+                    "albumOfTrack": {
+                        "uri": "spotify:album:2JknXBW2N9ncLyiLoUysvB",
+                        "name": "Soft",
+                        "coverArt": {
+                            "sources": [
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d00001e024dfa7b7faf9752400aac3957",
+                                    "width": 300,
+                                    "height": 300
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d000048514dfa7b7faf9752400aac3957",
+                                    "width": 64,
+                                    "height": 64
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d0000b2734dfa7b7faf9752400aac3957",
+                                    "width": 640,
+                                    "height": 640
+                                }
+                            ]
+                        },
+                        "id": "2JknXBW2N9ncLyiLoUysvB",
+                        "sharingInfo": {
+                            "shareUrl": "https://open.spotify.com/album/2JknXBW2N9ncLyiLoUysvB?si=7mFcb2rXQXCjqsEXbnW1Wg"
+                        }
+                    },
+                    "artists": {
+                        "items": [
+                            {
+                                "uri": "spotify:artist:5Vuvs6Py2JRU7WiFDVsI7J",
+                                "profile": {
+                                    "name": "Lucky Daye"
+                                }
+                            }
+                        ]
+                    },
+                    "contentRating": {
+                        "label": "NONE"
+                    },
+                    "duration": {
+                        "totalMilliseconds": 318715
+                    },
+                    "playability": {
+                        "playable": true
+                    }
+                }
+            },
+            {
+                "data": {
+                    "uri": "spotify:track:66EpioIqCVX9tstqGb8H1p",
+                    "id": "66EpioIqCVX9tstqGb8H1p",
+                    "name": "Soft",
+                    "albumOfTrack": {
+                        "uri": "spotify:album:3KBeogjq0VqoBUBmMUUuVx",
+                        "name": "Snowfall",
+                        "coverArt": {
+                            "sources": [
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d00001e02cf8f77592a12933fd4133298",
+                                    "width": 300,
+                                    "height": 300
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d00004851cf8f77592a12933fd4133298",
+                                    "width": 64,
+                                    "height": 64
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d0000b273cf8f77592a12933fd4133298",
+                                    "width": 640,
+                                    "height": 640
+                                }
+                            ]
+                        },
+                        "id": "3KBeogjq0VqoBUBmMUUuVx",
+                        "sharingInfo": {
+                            "shareUrl": "https://open.spotify.com/album/3KBeogjq0VqoBUBmMUUuVx?si=F9xubmAuSwmcmkEDUueOLw"
+                        }
+                    },
+                    "artists": {
+                        "items": [
+                            {
+                                "uri": "spotify:artist:5OWksQm7ONWIGZqMXovSli",
+                                "profile": {
+                                    "name": "Calmly"
+                                }
+                            }
+                        ]
+                    },
+                    "contentRating": {
+                        "label": "NONE"
+                    },
+                    "duration": {
+                        "totalMilliseconds": 101000
+                    },
+                    "playability": {
+                        "playable": true
+                    }
+                }
+            },
+            {
+                "data": {
+                    "uri": "spotify:track:4PvbbMYL4fkToni5BLaYRb",
+                    "id": "4PvbbMYL4fkToni5BLaYRb",
+                    "name": "Softly",
+                    "albumOfTrack": {
+                        "uri": "spotify:album:4kkVGtCqE2NiAKosri9Rnd",
+                        "name": "Immunity",
+                        "coverArt": {
+                            "sources": [
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d00001e0233ccb60f9b2785ef691b2fbc",
+                                    "width": 300,
+                                    "height": 300
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d0000485133ccb60f9b2785ef691b2fbc",
+                                    "width": 64,
+                                    "height": 64
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d0000b27333ccb60f9b2785ef691b2fbc",
+                                    "width": 640,
+                                    "height": 640
+                                }
+                            ]
+                        },
+                        "id": "4kkVGtCqE2NiAKosri9Rnd",
+                        "sharingInfo": {
+                            "shareUrl": "https://open.spotify.com/album/4kkVGtCqE2NiAKosri9Rnd?si=TR-0zIRRREa3ZAIIzqzeJw"
+                        }
+                    },
+                    "artists": {
+                        "items": [
+                            {
+                                "uri": "spotify:artist:3l0CmX0FuQjFxr8SK7Vqag",
+                                "profile": {
+                                    "name": "Clairo"
+                                }
+                            }
+                        ]
+                    },
+                    "contentRating": {
+                        "label": "NONE"
+                    },
+                    "duration": {
+                        "totalMilliseconds": 185306
+                    },
+                    "playability": {
+                        "playable": true
+                    }
+                }
+            },
+            {
+                "data": {
+                    "uri": "spotify:track:0ouHWeg6AZtp5Gevot8B4m",
+                    "id": "0ouHWeg6AZtp5Gevot8B4m",
+                    "name": "Yugoslavskiy Groove",
+                    "albumOfTrack": {
+                        "uri": "spotify:album:4NbqAiI9p6BzEvkGdSDcgI",
+                        "name": "Softic",
+                        "coverArt": {
+                            "sources": [
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d00001e02161c4f14672919a9e7cbf05a",
+                                    "width": 300,
+                                    "height": 300
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d00004851161c4f14672919a9e7cbf05a",
+                                    "width": 64,
+                                    "height": 64
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d0000b273161c4f14672919a9e7cbf05a",
+                                    "width": 640,
+                                    "height": 640
+                                }
+                            ]
+                        },
+                        "id": "4NbqAiI9p6BzEvkGdSDcgI",
+                        "sharingInfo": {
+                            "shareUrl": "https://open.spotify.com/album/4NbqAiI9p6BzEvkGdSDcgI?si=Mg1M2BWaTj2HPaxS5wWHOg"
+                        }
+                    },
+                    "artists": {
+                        "items": [
+                            {
+                                "uri": "spotify:artist:6LwKCnpeCVffopaYO3pafG",
+                                "profile": {
+                                    "name": "Soft Blade"
+                                }
+                            }
+                        ]
+                    },
+                    "contentRating": {
+                        "label": "NONE"
+                    },
+                    "duration": {
+                        "totalMilliseconds": 244000
+                    },
+                    "playability": {
+                        "playable": true
+                    }
+                }
+            },
+            {
+                "data": {
+                    "uri": "spotify:track:7petzbAJP403GAY6F3Zfbx",
+                    "id": "7petzbAJP403GAY6F3Zfbx",
+                    "name": "Soft",
+                    "albumOfTrack": {
+                        "uri": "spotify:album:5ucBd1GYFRg0uVhP4a4AY6",
+                        "name": "Graveyard Shift",
+                        "coverArt": {
+                            "sources": [
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d00001e0220bfa6114be3fcada3b5b3e3",
+                                    "width": 300,
+                                    "height": 300
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d0000485120bfa6114be3fcada3b5b3e3",
+                                    "width": 64,
+                                    "height": 64
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d0000b27320bfa6114be3fcada3b5b3e3",
+                                    "width": 640,
+                                    "height": 640
+                                }
+                            ]
+                        },
+                        "id": "5ucBd1GYFRg0uVhP4a4AY6",
+                        "sharingInfo": {
+                            "shareUrl": "https://open.spotify.com/album/5ucBd1GYFRg0uVhP4a4AY6?si=--PjwGgERCWYPYgcBNYC7Q"
+                        }
+                    },
+                    "artists": {
+                        "items": [
+                            {
+                                "uri": "spotify:artist:6MwPCCR936cYfM1dLsGVnl",
+                                "profile": {
+                                    "name": "Motionless In White"
+                                }
+                            }
+                        ]
+                    },
+                    "contentRating": {
+                        "label": "EXPLICIT"
+                    },
+                    "duration": {
+                        "totalMilliseconds": 210000
+                    },
+                    "playability": {
+                        "playable": true
+                    }
+                }
+            },
+            {
+                "data": {
+                    "uri": "spotify:track:5zJPOLHARLlw7QKnG3owCg",
+                    "id": "5zJPOLHARLlw7QKnG3owCg",
+                    "name": "Soft Clouds",
+                    "albumOfTrack": {
+                        "uri": "spotify:album:7GCuVvJWMNoOBT9GDTk5Vc",
+                        "name": "Soft Clouds",
+                        "coverArt": {
+                            "sources": [
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d00001e022d5875105abf84d92ecb302d",
+                                    "width": 300,
+                                    "height": 300
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d000048512d5875105abf84d92ecb302d",
+                                    "width": 64,
+                                    "height": 64
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d0000b2732d5875105abf84d92ecb302d",
+                                    "width": 640,
+                                    "height": 640
+                                }
+                            ]
+                        },
+                        "id": "7GCuVvJWMNoOBT9GDTk5Vc",
+                        "sharingInfo": {
+                            "shareUrl": "https://open.spotify.com/album/7GCuVvJWMNoOBT9GDTk5Vc?si=z1esfPK2RhKD4_5Ya4ZIsA"
+                        }
+                    },
+                    "artists": {
+                        "items": [
+                            {
+                                "uri": "spotify:artist:5OWksQm7ONWIGZqMXovSli",
+                                "profile": {
+                                    "name": "Calmly"
+                                }
+                            }
+                        ]
+                    },
+                    "contentRating": {
+                        "label": "NONE"
+                    },
+                    "duration": {
+                        "totalMilliseconds": 134000
+                    },
+                    "playability": {
+                        "playable": true
+                    }
+                }
+            },
+            {
+                "data": {
+                    "uri": "spotify:track:4NU5yHXds8GbCRjrZ0Ifz2",
+                    "id": "4NU5yHXds8GbCRjrZ0Ifz2",
+                    "name": "Softcore - slowed + reverb",
+                    "albumOfTrack": {
+                        "uri": "spotify:album:5JDXH690qoA5zM184Q2gLK",
+                        "name": "Softcore",
+                        "coverArt": {
+                            "sources": [
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d00001e02249d5e7e02ba89547ab1fd1f",
+                                    "width": 300,
+                                    "height": 300
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d00004851249d5e7e02ba89547ab1fd1f",
+                                    "width": 64,
+                                    "height": 64
+                                },
+                                {
+                                    "url": "https://i.scdn.co/image/ab67616d0000b273249d5e7e02ba89547ab1fd1f",
+                                    "width": 640,
+                                    "height": 640
+                                }
+                            ]
+                        },
+                        "id": "5JDXH690qoA5zM184Q2gLK",
+                        "sharingInfo": {
+                            "shareUrl": "https://open.spotify.com/album/5JDXH690qoA5zM184Q2gLK?si=G9HB-tt_TpiqdRHovIjTgw"
+                        }
+                    },
+                    "artists": {
+                        "items": [
+                            {
+                                "uri": "spotify:artist:2XqXXH9xPa1zucIOtZ3u3A",
+                                "profile": {
+                                    "name": "TommyMuzzic"
+                                }
+                            }
+                        ]
+                    },
+                    "contentRating": {
+                        "label": "NONE"
+                    },
+                    "duration": {
+                        "totalMilliseconds": 260178
+                    },
+                    "playability": {
+                        "playable": true
+                    }
+                }
+            }
+        ]
+    }
+}

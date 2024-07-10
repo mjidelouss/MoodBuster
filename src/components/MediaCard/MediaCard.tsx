@@ -1,6 +1,6 @@
 // MediaCard.tsx
 
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 interface Media {
   id: string | number;
@@ -11,7 +11,7 @@ interface Media {
   first_air_date?: string;
   vote_average?: number;
   overview?: string;
-  genres?: { id: number; name: string }[];
+  genres?: { id: number; name: string }[] | string[];
   runtime?: number;
   episode_run_time?: number[];
   number_of_seasons?: number;
@@ -39,6 +39,16 @@ interface Media {
   tags?: string[];
   ingredients?: string;
   instructions?: string;
+  artists?: string;
+  album?: string;
+  releaseDate?: string;
+  preview_url?: string;
+  duration_ms?: number;
+  popularity?: number;
+  explicit?: boolean;
+  track_number?: number;
+  disc_number?: number;
+  external_urls?: { spotify: string };
 }
 
 interface MediaCardProps {
@@ -50,25 +60,40 @@ function MediaCard({ media, mediaType }: MediaCardProps) {
   const title = media.title || media.name;
   const description = media.overview || media.description;
 
-  const director = media.credits?.crew.find(person => person.job === 'Director')?.name;
-  const cast = media.credits?.cast.slice(0, 5).map(actor => actor.name).join(', ');
+  const director = media.credits?.crew.find(
+    (person) => person.job === "Director"
+  )?.name;
+  const cast = media.credits?.cast
+    .slice(0, 5)
+    .map((actor) => actor.name)
+    .join(", ");
 
   const getImageUrl = () => {
-    if (mediaType === 'Book') {
+    if (mediaType === "Book") {
       return media.imageLinks?.thumbnail || media.imageLinks?.smallThumbnail;
-    } else if (mediaType === 'Food' || mediaType === 'Drink') {
+    } else if (mediaType === "Food" || mediaType === "Drink") {
+      return media.image;
+    } else if (mediaType === "Music") {
       return media.image;
     } else {
-      return media.poster_path ? `https://image.tmdb.org/t/p/w300${media.poster_path}` : null;
+      return media.poster_path
+        ? `https://image.tmdb.org/t/p/w300${media.poster_path}`
+        : null;
     }
   };
 
   const imageUrl = getImageUrl();
 
+  const formatDuration = (ms: number) => {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = ((ms % 60000) / 1000).toFixed(0);
+    return `${minutes}:${parseInt(seconds) < 10 ? "0" : ""}${seconds}`;
+  };
+
   const limitedTags = media.tags?.slice(0, 3) || [];
 
   return (
-    <motion.div 
+    <motion.div
       className="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 shadow-md flex flex-col md:flex-row"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -78,7 +103,113 @@ function MediaCard({ media, mediaType }: MediaCardProps) {
         <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4 font-cinzel">
           {title}
         </h3>
-        {(mediaType === 'Food' || mediaType === 'Drink') && (
+        {mediaType === "Music" && (
+          <>
+            <div className="mb-2 flex items-center">
+              <span className="inline-block bg-red-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                Artist(s)
+              </span>
+              <span className="text-gray-700 dark:text-gray-300 font-acme">
+                {media.artists}
+              </span>
+            </div>
+            <div className="mb-2 flex items-center">
+              <span className="inline-block bg-indigo-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                Album
+              </span>
+              <span className="text-gray-700 dark:text-gray-300 font-acme">
+                {media.album}
+              </span>
+            </div>
+            {media.releaseDate && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-green-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Release Year
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {media.releaseDate}
+                </span>
+              </div>
+            )}
+            {media.duration_ms && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-yellow-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Duration
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {formatDuration(media.duration_ms)}
+                </span>
+              </div>
+            )}
+            {media.popularity !== undefined && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-red-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Popularity
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {media.popularity}/100
+                </span>
+              </div>
+            )}
+            {media.explicit !== undefined && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-pink-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Explicit
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {media.explicit ? "Yes" : "No"}
+                </span>
+              </div>
+            )}
+            {media.track_number && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-blue-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Track Number
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {media.track_number}
+                </span>
+              </div>
+            )}
+            {media.disc_number && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-teal-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Disc Number
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {media.disc_number}
+                </span>
+              </div>
+            )}
+            {media.genres && media.genres.length > 0 && (
+              <div className="mb-2 flex items-center">
+                <span className="inline-block bg-gray-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                  Genres
+                </span>
+                <span className="text-gray-700 dark:text-gray-300 font-acme">
+                  {media.genres.join(", ")}
+                </span>
+              </div>
+            )}
+            {media.preview_url && (
+              <audio controls className="mt-4 w-full">
+                <source src={media.preview_url} type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+            )}
+            {media.external_urls?.spotify && (
+              <a
+                href={media.external_urls.spotify}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors font-audiowide"
+              >
+                Open in Spotify
+              </a>
+            )}
+          </>
+        )}
+        {(mediaType === "Food" || mediaType === "Drink") && (
           <>
             {media.total_time_minutes && (
               <div className="mb-2 flex items-center">
@@ -106,7 +237,7 @@ function MediaCard({ media, mediaType }: MediaCardProps) {
                   Tags
                 </span>
                 <span className="text-gray-700 dark:text-gray-300 font-acme">
-                  {limitedTags.join(', ')}
+                  {limitedTags.join(", ")}
                 </span>
               </div>
             )}
@@ -132,33 +263,39 @@ function MediaCard({ media, mediaType }: MediaCardProps) {
             )}
           </>
         )}
-        {mediaType !== 'Food' && mediaType !== 'Drink' && media.release_date && (
-          <div className="mb-2 flex items-center">
-            <span className="inline-block bg-green-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
-              {mediaType === 'Book' ? 'Published Date' : mediaType === 'TV Show' ? 'First Air Date' : 'Release Date'}
-            </span>
-            <span className="text-gray-700 dark:text-gray-300 font-cinzel">
-              {media.release_date}
-            </span>
-          </div>
-        )}
-        {mediaType === 'Book' && media.authors && (
+        {mediaType !== "Food" &&
+          mediaType !== "Drink" &&
+          media.release_date && (
+            <div className="mb-2 flex items-center">
+              <span className="inline-block bg-green-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
+                {mediaType === "Book"
+                  ? "Published Date"
+                  : mediaType === "TV Show"
+                  ? "First Air Date"
+                  : "Release Date"}
+              </span>
+              <span className="text-gray-700 dark:text-gray-300 font-cinzel">
+                {media.release_date}
+              </span>
+            </div>
+          )}
+        {mediaType === "Book" && media.authors && (
           <div className="mb-2 flex items-center">
             <span className="inline-block bg-red-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
               Author(s)
             </span>
             <span className="text-gray-700 dark:text-gray-300 font-acme">
-              {media.authors.join(', ')}
+              {media.authors.join(", ")}
             </span>
           </div>
         )}
-        {mediaType === 'Book' && media.categories && (
+        {mediaType === "Book" && media.categories && (
           <div className="mb-2 flex items-center">
             <span className="inline-block bg-yellow-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
               Categories
             </span>
             <span className="text-gray-700 dark:text-gray-300 font-acme">
-              {media.categories.join(', ')}
+              {media.categories.join(", ")}
             </span>
           </div>
         )}
@@ -168,17 +305,23 @@ function MediaCard({ media, mediaType }: MediaCardProps) {
               Rating
             </span>
             <span className="text-gray-700 dark:text-gray-300 font-acme">
-              {media.averageRating ? `${media.averageRating.toFixed(1)}/5` : `${media.vote_average?.toFixed(1)}/10`}
+              {media.averageRating
+                ? `${media.averageRating.toFixed(1)}/5`
+                : `${media.vote_average?.toFixed(1)}/10`}
             </span>
           </div>
         )}
-        {media.genres && (
+        {media.genres && media.genres.length > 0 && (
           <div className="mb-2 flex items-center">
             <span className="inline-block bg-yellow-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
               Genres
             </span>
             <span className="text-gray-700 dark:text-gray-300 font-acme">
-              {media.genres.map(genre => genre.name).join(', ')}
+              {media.genres
+                .map((genre) =>
+                  typeof genre === "string" ? genre : genre.name
+                )
+                .join(", ")}
             </span>
           </div>
         )}
@@ -192,7 +335,7 @@ function MediaCard({ media, mediaType }: MediaCardProps) {
             </span>
           </div>
         )}
-        {mediaType === 'TV Show' && media.number_of_seasons && (
+        {mediaType === "TV Show" && media.number_of_seasons && (
           <div className="mb-2 flex items-center">
             <span className="inline-block bg-yellow-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
               Seasons
@@ -202,7 +345,7 @@ function MediaCard({ media, mediaType }: MediaCardProps) {
             </span>
           </div>
         )}
-        {mediaType === 'TV Show' && media.number_of_episodes && (
+        {mediaType === "TV Show" && media.number_of_episodes && (
           <div className="mb-2 flex items-center">
             <span className="inline-block bg-pink-500 text-white text-sm px-2 py-1 rounded-full mr-2 font-audiowide">
               Episodes
@@ -235,10 +378,10 @@ function MediaCard({ media, mediaType }: MediaCardProps) {
         <p className="text-gray-700 dark:text-gray-300 font-acme">
           {description}
         </p>
-        {mediaType === 'Book' && media.infoLink && (
-          <a 
-            href={media.infoLink} 
-            target="_blank" 
+        {mediaType === "Book" && media.infoLink && (
+          <a
+            href={media.infoLink}
+            target="_blank"
             rel="noopener noreferrer"
             className="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors font-audiowide"
           >
